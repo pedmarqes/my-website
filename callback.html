@@ -5,21 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Callback Salesforce</title>
   <script>
-    // Quando a página for carregada, pega o código da URL
     window.onload = function() {
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get('code');  // Obtém o código de autorização da URL
+      // Obtém o código de autorização da URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code'); // 'code' é o parâmetro que contém o código de autorização
 
-      // Envia a mensagem para a janela principal (LWC)
+      // Verifica se o código está presente na URL
       if (code) {
-        window.opener.postMessage({ code: code }, 'https://pemarques.com.br'); // Envia para o LWC
+        // Envia o código de volta para a janela principal usando postMessage
+        window.opener.postMessage({ code: code }, '*');  // '*' permite que o código seja enviado para qualquer origem
+
+        // Não fecha a janela imediatamente. Vamos esperar um pouco para garantir que o código seja processado
+        setTimeout(function() {
+          window.close(); // Fecha a janela de callback após um pequeno delay
+        }, 500); // Espera meio segundo antes de fechar a janela
       }
-      // Fecha a janela de callback após enviar o código
-      window.close();
     };
   </script>
 </head>
 <body>
-  <h1>Autenticando...</h1>
+  <h1>Redirecionando...</h1>
 </body>
 </html>
