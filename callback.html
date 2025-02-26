@@ -1,16 +1,72 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Callback</title>
-    <script>
-        // Função para fechar a guia após 5 segundos
-        setTimeout(function() {
-            window.close(); // Fecha a janela
-        }, 5000); // 5000 milissegundos = 5 segundos
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicar e Ler Mensagem</title>
+    <script src="https://cdn.jsdelivr.net/npm/@lwc/engine@2.9.1/dist/engine.min.js"></script>
 </head>
 <body>
-    <h1>Processando Login...</h1>
+    <h1>Publicar e Ler Mensagem de Teste</h1>
+
+    <!-- Botão para publicar a mensagem -->
+    <button id="publishBtn">Publicar Mensagem</button>
+    <p id="publishedMessage"></p>
+
+    <!-- Área onde o LWC será renderizado -->
+    <div id="lwcContainer"></div>
+
+    <script>
+        // Função para publicar a mensagem e disparar o evento
+        document.getElementById('publishBtn').addEventListener('click', function() {
+            const message = "Mensagem de Teste Publicada!";
+            
+            // Exibir a mensagem na página
+            document.getElementById('publishedMessage').innerText = message;
+
+            // Criar e disparar um evento customizado
+            const event = new CustomEvent('messagepublished', {
+                detail: message
+            });
+
+            // Enviar o evento para a div do LWC
+            const lwcContainer = document.getElementById('lwcContainer');
+            lwcContainer.dispatchEvent(event);
+        });
+
+        // Definição do LWC
+        class ReadMessage extends HTMLElement {
+            constructor() {
+                super();
+                this.message = '';
+                this.attachShadow({ mode: 'open' });  // Usando Shadow DOM para encapsulamento
+                this.shadowRoot.innerHTML = `<p id="message"></p>`;
+            }
+
+            connectedCallback() {
+                // Escuta o evento customizado 'messagepublished'
+                const lwcContainer = document.getElementById('lwcContainer');
+                lwcContainer.addEventListener('messagepublished', this.handleMessagePublished.bind(this));
+            }
+
+            handleMessagePublished(event) {
+                // Captura a mensagem do evento e exibe no LWC
+                this.message = event.detail;
+                this.displayMessage();
+            }
+
+            displayMessage() {
+                // Exibe a mensagem recebida no LWC
+                this.shadowRoot.getElementById('message').innerText = `Mensagem recebida pelo LWC: ${this.message}`;
+            }
+        }
+
+        // Registrando o LWC
+        customElements.define('c-read-message', ReadMessage);
+
+        // Criar o elemento LWC e adicionar ao contêiner
+        const lwcElement = document.createElement('c-read-message');
+        document.getElementById('lwcContainer').appendChild(lwcElement);
+    </script>
 </body>
 </html>
