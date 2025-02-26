@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Evento de Message</title>
+  <title>Callback Salesforce</title>
+  <script>
+    // Quando a página for carregada, pega o código da URL
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');  // Obtém o código de autorização da URL
+
+      // Envia a mensagem para a janela principal (LWC)
+      if (code) {
+        window.opener.postMessage({ code: code }, 'https://pemarques.com.br'); // Envia para o LWC
+      }
+      // Fecha a janela de callback após enviar o código
+      window.close();
+    };
+  </script>
 </head>
 <body>
-  <script>
-    // Dispara o evento 'message' para o próprio contexto da janela
-    window.postMessage('Mensagem disparada', '*');
-
-    // Adiciona um listener para ouvir o evento 'message'
-    window.addEventListener('message', function(event) {
-      console.log('Evento de message recebido: ', event.data);
-    });
-  </script>
+  <h1>Autenticando...</h1>
 </body>
 </html>
