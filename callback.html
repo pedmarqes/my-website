@@ -15,11 +15,17 @@
             if (code) {
                 console.log('Código de autorização:', code);
 
-                // Disparar um evento customizado para a janela principal (onde o LWC está)
-                const event = new CustomEvent('authorizationcode', {
-                    detail: { code: code }
-                });
-                window.opener.dispatchEvent(event);  // Envia o código para a janela principal
+                // Verificar se a janela pai (window.opener) está disponível
+                if (window.opener) {
+                    // Disparar um evento customizado para a janela principal (onde o LWC está)
+                    const event = new CustomEvent('authorizationcode', {
+                        detail: { code: code }
+                    });
+                    window.opener.dispatchEvent(event);  // Envia o código para a janela principal
+                    console.log('Evento de código de autorização enviado para a janela pai.');
+                } else {
+                    console.log('Erro: window.opener não está disponível.');
+                }
 
                 // Fecha a janela de callback
                 window.close();
