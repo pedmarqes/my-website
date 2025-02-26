@@ -1,11 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OAuth Callback</title>
+    <title>Callback</title>
 </head>
 <body>
-   <p>Ola</p>
+    <h1>Processando Login...</h1>
+    <script>
+        // Função para obter o código de autorização da URL
+        function getAuthorizationCode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');  // Obtém o código da URL
+
+            if (code) {
+                console.log('Código de autorização:', code);
+
+                // Disparar um evento customizado para a janela principal (onde o LWC está)
+                const event = new CustomEvent('authorizationcode', {
+                    detail: { code: code }
+                });
+                window.opener.dispatchEvent(event);  // Envia o código para a janela principal
+
+                // Fecha a janela de callback
+                window.close();
+            } else {
+                console.log('Código não encontrado.');
+            }
+        }
+
+        // Executar a função quando a página carregar
+        window.onload = getAuthorizationCode;
+    </script>
 </body>
 </html>
