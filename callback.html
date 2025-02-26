@@ -6,30 +6,6 @@
     <title>OAuth Callback</title>
 </head>
 <body>
-    <script>
-        // Função para capturar o código da URL
-        function captureCode() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-
-            if (code) {
-                console.log('Código de autorização capturado na página de callback:', code);
-
-                // Dispara o CustomEvent para enviar o código de volta para o LWC
-                const event = new CustomEvent('authorizationcode', {
-                    detail: { code: code }
-                });
-                window.dispatchEvent(event);  // Dispara o evento na janela principal
-
-                // Opcionalmente, redireciona para a página inicial ou outra ação
-                window.location.href = '/';  // Redirecionamento após captura do código
-            } else {
-                console.log('Código não encontrado na URL');
-            }
-        }
-
-        // Chama a função de captura assim que a página é carregada
-        captureCode();
-    </script>
+   <p>Ola</p>
 </body>
 </html>
