@@ -6,36 +6,33 @@
 </head>
 <body>
     <h1>Processando Login...</h1>
-    <script>
-        // Função para obter o código de autorização da URL
-        function getAuthorizationCode() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');  // Obtém o código da URL
+<script>
+    function getAuthorizationCode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');  // Obtém o código da URL
 
-            if (code) {
-                console.log('Código de autorização:', code);
+        if (code) {
+            console.log('Código de autorização:', code);
 
-                // Verificar se a janela pai (window.opener) está disponível
-                if (window.opener) {
-                    // Disparar um evento customizado para a janela principal (onde o LWC está)
-                    const event = new CustomEvent('authorizationcode', {
-                        detail: { code: code }
-                    });
-                    window.opener.dispatchEvent(event);  // Envia o código para a janela principal
-                    console.log('Evento de código de autorização enviado para a janela pai.');
-                } else {
-                    console.log('Erro: window.opener não está disponível.');
-                }
-
-                // Fecha a janela de callback
-                window.close();
+            // Verifica se o window.opener existe e dispara o evento
+            if (window.opener) {
+                const event = new CustomEvent('authorizationcode', {
+                    detail: { code: code }
+                });
+                window.opener.dispatchEvent(event);  // Dispara o evento na janela pai
+                console.log('Evento de código de autorização enviado para a janela pai.');
             } else {
-                console.log('Código não encontrado.');
+                console.log('Erro: window.opener não está disponível.');
             }
-        }
 
-        // Executar a função quando a página carregar
-        window.onload = getAuthorizationCode;
-    </script>
+            window.close();  // Fecha a janela de callback
+        } else {
+            console.log('Código não encontrado.');
+        }
+    }
+
+    window.onload = getAuthorizationCode;
+</script>
+
 </body>
 </html>
