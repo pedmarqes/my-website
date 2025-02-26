@@ -3,36 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Callback</title>
+    <script>
+        // Função para fechar a guia após 5 segundos
+        setTimeout(function() {
+            window.close(); // Fecha a janela
+        }, 5000); // 5000 milissegundos = 5 segundos
+    </script>
 </head>
 <body>
     <h1>Processando Login...</h1>
-<script>
-    function getAuthorizationCode() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');  // Obtém o código da URL
-
-        if (code) {
-            console.log('Código de autorização:', code);
-
-            // Verifica se o window.opener existe e dispara o evento
-            if (window.opener) {
-                const event = new CustomEvent('authorizationcode', {
-                    detail: { code: code }
-                });
-                window.opener.dispatchEvent(event);  // Dispara o evento na janela pai
-                console.log('Evento de código de autorização enviado para a janela pai.');
-            } else {
-                console.log('Erro: window.opener não está disponível.');
-            }
-
-            window.close();  // Fecha a janela de callback
-        } else {
-            console.log('Código não encontrado.');
-        }
-    }
-
-    window.onload = getAuthorizationCode;
-</script>
-
 </body>
 </html>
